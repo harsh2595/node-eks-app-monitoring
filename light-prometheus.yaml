@@ -1,0 +1,19 @@
+grafana:
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 100m
+    requests:
+      memory: 128Mi
+      cpu: 50m
+
+prometheus:
+  prometheusSpec:
+    retention: 1d
+    resources:
+      limits:
+        memory: 512Mi
+        cpu: 250m
+      requests:
+        memory: 256Mi
+        cpu: 100m
