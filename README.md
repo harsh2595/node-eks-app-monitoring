@@ -321,33 +321,38 @@ docker tag nodejs-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/nod
 
 # Push
 docker push <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/nodejs-app:latest
-kubectl apply -f nodejs-app.yaml
-Step 4: Create ServiceMonitor for Prometheus
-Create nodejs-servicemonitor.yaml
-Apply it:
 
+kubectl apply -f nodejs-app.yaml
+
+Step 4: Create ServiceMonitor for Prometheus
+
+Create nodejs-servicemonitor.yaml - Apply it:
 
 kubectl apply -f nodejs-servicemonitor.yaml
+
 Step 5: Verify Prometheus is Scraping Your App
+
 Port-forward Prometheus:
 
-
 kubectl port-forward svc/monitoring-kube-prometheus-prometheus 9090:9090
+
 Open http://localhost:9090 → Status → Targets.
+
 You should see your nodejs-app target as UP.
 
 Step 6: View in Grafana
+
 Open Grafana:
 
 kubectl port-forward svc/monitoring-grafana 3000:80
-→ Go to http://localhost:3000.
+
+1. Go to http://localhost:3000.
 2. Data Sources → Prometheus → Already configured by Helm.
 3. Import a dashboard:
 
 Left Menu → Dashboards → + Import → Use ID: 1860 (Node Exporter Full) or create a custom one.
 
 Add a panel with query:
-
 
 up{job="nodejs-app"}
 You should see your app’s availability.
@@ -357,4 +362,3 @@ You can also query:
 process_cpu_user_seconds_total
 process_resident_memory_bytes
 to see CPU & memory usage of your Node.js app.
-
