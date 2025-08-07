@@ -265,15 +265,11 @@ We’ll use prom-client to expose /metrics in Prometheus format.
 
 1️⃣ Install prom-client:
 
-bash
-Copy
-Edit
+
 npm install prom-client
 2️⃣ Update your server.js (or index.js):
 
-js
-Copy
-Edit
+
 const express = require("express");
 const client = require("prom-client");
 const app = express();
@@ -303,12 +299,10 @@ app.get("/metrics", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
 Step 2: Dockerize Your App
 Create a Dockerfile:
 
-dockerfile
-Copy
-Edit
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -318,9 +312,7 @@ EXPOSE 3000
 CMD ["node", "server.js"]
 Build and push to ECR:
 
-bash
-Copy
-Edit
+
 # Build
 docker build -t nodejs-app .
 
@@ -401,16 +393,12 @@ spec:
       interval: 15s
 Apply it:
 
-bash
-Copy
-Edit
+
 kubectl apply -f nodejs-servicemonitor.yaml
 Step 5: Verify Prometheus is Scraping Your App
 Port-forward Prometheus:
 
-bash
-Copy
-Edit
+
 kubectl port-forward svc/monitoring-kube-prometheus-prometheus 9090:9090
 Open http://localhost:9090 → Status → Targets.
 You should see your nodejs-app target as UP.
@@ -418,9 +406,6 @@ You should see your nodejs-app target as UP.
 Step 6: View in Grafana
 Open Grafana:
 
-bash
-Copy
-Edit
 kubectl port-forward svc/monitoring-grafana 3000:80
 → Go to http://localhost:3000.
 2. Data Sources → Prometheus → Already configured by Helm.
@@ -430,16 +415,12 @@ Left Menu → Dashboards → + Import → Use ID: 1860 (Node Exporter Full) or c
 
 Add a panel with query:
 
-promql
-Copy
-Edit
+
 up{job="nodejs-app"}
 You should see your app’s availability.
 You can also query:
 
-promql
-Copy
-Edit
+
 process_cpu_user_seconds_total
 process_resident_memory_bytes
 to see CPU & memory usage of your Node.js app.
