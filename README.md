@@ -321,76 +321,9 @@ docker tag nodejs-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/nod
 
 # Push
 docker push <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/nodejs-app:latest
-Step 3: Deploy Node.js App to EKS
-Create a file nodejs-app.yaml:
-
-yaml
-Copy
-Edit
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nodejs-app
-  namespace: monitoring
-  labels:
-    app: nodejs-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nodejs-app
-  template:
-    metadata:
-      labels:
-        app: nodejs-app
-    spec:
-      containers:
-        - name: nodejs-app
-          image: <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/nodejs-app:latest
-          ports:
-            - containerPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nodejs-app
-  namespace: monitoring
-  labels:
-    app: nodejs-app
-spec:
-  selector:
-    app: nodejs-app
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: ClusterIP
-Apply it:
-
-bash
-Copy
-Edit
 kubectl apply -f nodejs-app.yaml
 Step 4: Create ServiceMonitor for Prometheus
-Create nodejs-servicemonitor.yaml:
-
-yaml
-Copy
-Edit
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: nodejs-app-monitor
-  namespace: monitoring
-spec:
-  selector:
-    matchLabels:
-      app: nodejs-app
-  endpoints:
-    - port: http
-      path: /metrics
-      interval: 15s
+Create nodejs-servicemonitor.yaml
 Apply it:
 
 
